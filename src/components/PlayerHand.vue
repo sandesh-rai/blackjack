@@ -1,13 +1,13 @@
 <template>
-    <PlayingCard/>
+    <PlayerHandCard/>
 </template>
 
 <script>
-import PlayingCard from './PlayingCard.vue';
+import PlayerHandCard from './PlayerHandCard.vue';
 
 export default {
     name: "PlayerHand",
-    components: { PlayingCard }
+    components: { PlayerHandCard }
 }
 </script>
 
