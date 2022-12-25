@@ -86,7 +86,7 @@ export default {
           } else if (['K', 'Q', 'J'].includes(cardStr)) {
             this.player.score += 10;
           } else {
-            if (this.player.score >= 10) {
+            if (this.player.score <= 10) {
               // If card is an Ace
               this.player.score += 11;
             } else {

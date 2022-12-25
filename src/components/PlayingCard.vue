@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card" :style="(card[0] == 'H' || card[0] == 'D') ? 'color: red' : 'color: black'">
         <span class="card-val">
             {{ cardVal }}
         </span>
@@ -21,7 +21,17 @@ export default {
             return this.card.slice(1); 
         },
         cardSuit(){
-            return this.card[0];
+            if (this.card[0] === 'S') {
+                return "♠";
+            } else if (this.card[0] === 'H') {
+                return "♥";
+            } else if (this.card[0] === 'D') {
+                return "♦";
+            } else if (this.card[0] === "C") {
+                return "♣";
+            } else {
+                return "";
+            }
         }
     }
 }
