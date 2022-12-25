@@ -1,8 +1,8 @@
 <template>
   <main class="game-board">
-    <HandCards :hand="dealer.hand" :score="(revealDealer) ? dealer.score : dealer.firstCardScore" :isDealer="true"/>
+    <HandCards :hand="dealer.hand" :score="(hideDealer) ? dealer.firstCardScore : dealer.score" :isDealer="true" :hideDealer="hideDealer"/>
     <HandCards :hand="player.hand" :score="player.score"/>
-    <GameControl @hitPressed="dealCard('player')"/>
+    <GameControl @hitPressed="dealCard('player')" @standPressed="standPressed"/>
   </main>
 </template>
 
@@ -26,7 +26,7 @@ export default {
           score: 0
         },
         cardCount: 0,
-        revealDealer: false
+        hideDealer: true
       }
     },
     methods: {
@@ -89,13 +89,14 @@ export default {
 
         if (receiver === 'player') {
           if (/^\d+$/.test(cardStr)) {
-          //If  the string is a number
+          //If it's a number card
           this.player.score += parseInt(cardStr);
           } else if (['K', 'Q', 'J'].includes(cardStr)) {
+            // If it's King, Queen or Jack
             this.player.score += 10;
           } else {
+            // If it's an Ace
             if (this.player.score <= 10) {
-              // If card is an Ace
               this.player.score += 11;
             } else {
               this.player.score += 1;
@@ -105,13 +106,14 @@ export default {
         
         if (receiver === 'dealer') {
           if (/^\d+$/.test(cardStr)) {
-          //If  the string is a number
+          //If it's a number card
           this.dealer.score += parseInt(cardStr);
           } else if (['K', 'Q', 'J'].includes(cardStr)) {
+            // If it's King, Queen or Jack
             this.dealer.score += 10;
           } else {
-            if (this.dealer.score >= 10) {
-              // If card is an Ace
+            // If it's an Ace
+            if (this.dealer.score <= 10) {
               this.dealer.score += 11;
             } else {
               this.dealer.score += 1;
@@ -123,6 +125,9 @@ export default {
             this.dealer.firstCardScore += this.dealer.score;
           }
         }
+      },
+      standPressed(){
+        this.hideDealer = false;
       }
     },
     created () {

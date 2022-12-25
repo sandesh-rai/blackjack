@@ -9,7 +9,7 @@
         <div class="player-hand">
             <TransitionGroup name="cards" tag="div">
                 <div v-for="(card, index) in hand" :key="card">
-                    <PlayingCard :card="card" :hideCard="hideCardForDealer(index)"/>
+                    <PlayingCard :card="card" :hideCard="hideLastCardForDealer(index)"/>
                 </div>
             </TransitionGroup>
         </div>
@@ -32,12 +32,16 @@ export default {
         isDealer: {
             type: Boolean,
             default: false
+        },
+        hideDealer: {
+            type: Boolean,
+            default: false
         }
     },
     components: { PlayingCard },
     methods: {
-        hideCardForDealer(cardIndex) {
-            return this.isDealer && cardIndex == 1;
+        hideLastCardForDealer(cardIndex) {
+            return this.isDealer && cardIndex == 1 && this.hideDealer;
         }
     },
 }
