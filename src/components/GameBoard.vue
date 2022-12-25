@@ -60,12 +60,12 @@ export default {
       async dealFirstTwoCards(){
         while (this.cardCount < 4) {
           // Player
-          await this.animationDelay(500);
           this.dealCard('player');
+          await this.animationDelay(500);
 
           //Dealer
-          await this.animationDelay(500);
           this.dealCard('dealer');
+          await this.animationDelay(500);
         }
       },
       dealCard(receiver){

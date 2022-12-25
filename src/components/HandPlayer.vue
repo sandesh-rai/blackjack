@@ -1,14 +1,16 @@
 <template>
     <section>
         <h2>
-            <template v-if="isDealer">Dealer's Hand</template>
+            <template v-if="isDealer">Dealer's Hand:</template>
             <template v-else>Player's Hand</template>
             : {{score}}
         </h2>
        
         <div class="player-hand">
             <TransitionGroup name="cards" tag="div">
-                <PlayingCard v-for="card in hand" :card="card" :key="card"/>
+                <div v-for="(card, index) in hand" :key="card">
+                    <PlayingCard :card="card" :hideCard="hideCardForDealer(index)"/>
+                </div>
             </TransitionGroup>
         </div>
     </section>
@@ -32,7 +34,12 @@ export default {
             default: false
         }
     },
-    components: { PlayingCard }
+    components: { PlayingCard },
+    methods: {
+        hideCardForDealer(cardIndex) {
+            return this.isDealer && cardIndex == this.hand.length - 1;
+        }
+    },
 }
 </script>
 

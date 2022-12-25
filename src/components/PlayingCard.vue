@@ -1,5 +1,5 @@
 <template>
-    <div class="card" :style="(card[0] == 'H' || card[0] == 'D') ? 'color: red' : 'color: black'">
+    <div v-if="!hideCard" class="card" :style="(card[0] == 'H' || card[0] == 'D') ? 'color: red' : 'color: black'">
         <span class="card-val">
             {{ cardVal }}
         </span>
@@ -7,13 +7,18 @@
             {{ cardSuit }}
         </span>
     </div>
+    <div v-else class="card hidden-card"></div>
 </template>
 
 <script>
 export default {
     name: 'PlayingCard',
     props: {
-            card: String
+            card: String,
+            hideCard: {
+                type: Boolean,
+                default: false
+            }
         },
     
     computed: {
@@ -52,6 +57,17 @@ export default {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.hidden-card {
+    border: 4px solid white;
+    background: repeating-linear-gradient(
+        45deg,
+        #bc1616,
+        #bc1616 10px,
+        #9f0909 10px,
+        #9f0909 20px
+    );
 }
 
 .card > span.card-val {
