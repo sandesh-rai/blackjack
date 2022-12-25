@@ -1,22 +1,29 @@
 <template>
-  <div>
+  <div class="game-board">
     <PlayerHand/>
+    <GameControl @hitPressed="hitPressed"/>
   </div>
 </template>
 
 <script>
+import GameControl from './GameControl.vue';
 import PlayerHand from './PlayerHand.vue';
 
 export default {
     name: "GameBoard",
-    components: {PlayerHand },
+    components: { PlayerHand, GameControl },
     data() {
       return {
-        hands: {
-          dealer: [],
-          player: []
-        },
         deckCards: [],
+        dealer: {
+          hand: [],
+          score: 0
+        },
+        player: {
+          hand: [],
+          score: 0
+        },
+        cardCount: 0
       }
     },
     methods: {
@@ -45,11 +52,28 @@ export default {
           this.deckCards[curr] = this.deckCards[rand];
           this.deckCards[rand] = currCard;
         }
+      }, 
+      dealFirstTwoCards(){
+        while (this.cardCount < 4) {
+          // Player
+          this.player.hand.push(this.deckCards[this.cardCount]);
+          this.cardCount++;
+
+          //Dealer
+          this.dealer.hand.push(this.deckCards[this.cardCount])
+          this.cardCount++;
+        }
+      },
+      hitPressed(){
+        this.player.hand.push(this.deckCards[this.cardCount]);
+        this.cardCount++;
+        console.log('HELLO!')
       }
     },
     created () {
       this.createDeck();
       this.shuffleCards();
+      this.dealFirstTwoCards();
     },
 }
 </script>
@@ -61,5 +85,11 @@ export default {
 <style>
   body {
     background-color: darkgreen;
+  }
+
+  .game-board {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
   }
 </style>
