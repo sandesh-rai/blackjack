@@ -1,9 +1,11 @@
 <template>
     <section>
         <h2>
-            <template v-if="isDealer">Dealer's Hand: </template>
-            <template v-else>Player's Hand: </template>
-            {{score}}
+            <span>
+                <template v-if="isDealer">Dealer's Hand: </template>
+                <template v-else>Player's Hand: </template>
+                {{score}}
+            </span>
         </h2>
        
         <div class="player-hand">
@@ -59,9 +61,21 @@ section {
 section > h2 {
     text-align: center;
     color: #fff;
-    font-weight: 800;
+    font-weight: 700;
     margin-top: 3rem;
     font-size: 2rem;
+}
+
+section > h2 > span {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 1.25rem;
+    border-radius: 1rem;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .cards-move,
