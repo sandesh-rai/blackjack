@@ -1,30 +1,32 @@
 <template>
   <main class="game-board">
-    <HandPlayer :hand="dealer.hand" :score="dealer.score" :isDealer="true"/>
-    <HandPlayer :hand="player.hand" :score="player.score"/>
+    <HandCards :hand="dealer.hand" :score="(revealDealer) ? dealer.score : dealer.firstCardScore" :isDealer="true"/>
+    <HandCards :hand="player.hand" :score="player.score"/>
     <GameControl @hitPressed="dealCard('player')"/>
   </main>
 </template>
 
 <script>
 import GameControl from './GameControl.vue';
-import HandPlayer from './HandPlayer.vue';
+import HandCards from './HandCards.vue';
 
 export default {
     name: "GameBoard",
-    components: { HandPlayer, GameControl },
+    components: { HandCards, GameControl },
     data() {
       return {
         deckCards: [],
         dealer: {
           hand: [],
-          score: 0
+          score: 0,
+          firstCardScore: 0,
         },
         player: {
           hand: [],
           score: 0
         },
         cardCount: 0,
+        revealDealer: false
       }
     },
     methods: {
@@ -114,6 +116,11 @@ export default {
             } else {
               this.dealer.score += 1;
             }
+          }
+
+          // If dealer's first card, record the score
+          if (this.dealer.hand.length === 1) {
+            this.dealer.firstCardScore += this.dealer.score;
           }
         }
       }

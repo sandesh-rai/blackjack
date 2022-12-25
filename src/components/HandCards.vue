@@ -20,7 +20,7 @@
 import PlayingCard from './PlayingCard.vue';
 
 export default {
-    name: "HandPlayer",
+    name: "HandCards",
     props: {
         hand: {
             type: Array
@@ -37,7 +37,7 @@ export default {
     components: { PlayingCard },
     methods: {
         hideCardForDealer(cardIndex) {
-            return this.isDealer && cardIndex == this.hand.length - 1;
+            return this.isDealer && cardIndex == 1;
         }
     },
 }
