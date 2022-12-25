@@ -1,6 +1,6 @@
 <template>
   <main class="game-board">
-    <HandCards :hand="dealer.hand" :score="(hideDealer) ? dealer.firstCardScore : dealer.score" :isDealer="true" :hideDealer="hideDealer"/>
+    <HandCards :isDealer="true" :hand="dealer.hand" :score="(hideDealer) ? dealer.firstCardScore : dealer.score" :hideDealer="hideDealer"/>
     <HandCards :hand="player.hand" :score="player.score"/>
     <GameControl @hitPressed="dealCard('player')" @standPressed="standPressed"/>
   </main>
@@ -141,15 +141,7 @@ export default {
 </script>
 
 <style scoped>
-
-</style>
-
-<style>
-  body {
-    background-color: darkgreen;
-  }
-
-  .game-board {
+.game-board {
     display: flex;
     flex-direction: column;
     height: 100vh;

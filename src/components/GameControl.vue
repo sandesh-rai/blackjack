@@ -29,10 +29,12 @@
 }
 
 .control button {
-    min-width: 8rem;
-    border-radius: 1rem;
-    font-size: 1.25rem;
+    min-width: 10rem;
+    border-radius: 2rem;
+    font-size: 1.5rem;
     padding: 1.5rem 1rem;
+    border: 4px solid black;
+    font-weight: 700;
 }
 
 .control button:hover, .control button:focus-visible {

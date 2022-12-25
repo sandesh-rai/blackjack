@@ -1,9 +1,9 @@
 <template>
     <section>
         <h2>
-            <template v-if="isDealer">Dealer's Hand:</template>
-            <template v-else>Player's Hand</template>
-            : {{score}}
+            <template v-if="isDealer">Dealer's Hand: </template>
+            <template v-else>Player's Hand: </template>
+            {{score}}
         </h2>
        
         <div class="player-hand">
@@ -49,7 +49,7 @@ export default {
 
 <style scoped>
 section {
-    min-height: 300px;
+    min-height: 330px;
 }
 .player-hand > div {
     display: flex;
@@ -60,7 +60,7 @@ section > h2 {
     text-align: center;
     color: #fff;
     font-weight: 800;
-    margin-top: 1.5rem;
+    margin-top: 3rem;
     font-size: 2rem;
 }
 
