@@ -5,8 +5,11 @@
             <template v-else>Player's Hand</template>
             : {{score}}
         </h2>
+       
         <div class="player-hand">
-            <PlayingCard v-for="card in hand" :card="card" :key="card"/>
+            <TransitionGroup name="cards" tag="div">
+                <PlayingCard v-for="card in hand" :card="card" :key="card"/>
+            </TransitionGroup>
         </div>
     </section>
 </template>
@@ -34,7 +37,10 @@ export default {
 </script>
 
 <style scoped>
-.player-hand {
+section {
+    min-height: 300px;
+}
+.player-hand > div {
     display: flex;
     justify-content: center;
 }
@@ -46,4 +52,19 @@ section > h2 {
     margin-top: 1.5rem;
     font-size: 2rem;
 }
+
+.cards-move,
+.cards-enter-active,
+.cards-leave-active {
+    transition: all 0.5s ease;
+}
+.cards-enter,
+.cards-leave-to {
+    transform: translateY(-100vh);
+}
+
+.cards-leave-active {
+  position: absolute;
+}
+
 </style>

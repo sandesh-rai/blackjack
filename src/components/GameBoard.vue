@@ -54,12 +54,17 @@ export default {
           this.deckCards[rand] = currCard;
         }
       }, 
-      dealFirstTwoCards(){
+      animationDelay(milliseconds) {
+      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+      },
+      async dealFirstTwoCards(){
         while (this.cardCount < 4) {
           // Player
+          await this.animationDelay(500);
           this.dealCard('player');
 
           //Dealer
+          await this.animationDelay(500);
           this.dealCard('dealer');
         }
       },
@@ -116,6 +121,8 @@ export default {
     created () {
       this.createDeck();
       this.shuffleCards();
+    },
+    mounted () {
       this.dealFirstTwoCards();
     },
 }
