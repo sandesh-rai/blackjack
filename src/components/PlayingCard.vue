@@ -43,7 +43,8 @@ export default {
     width: 8rem;
     position: relative;
     background-color: white;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
+    border: 4px solid black;
     margin: 1rem 0.5rem;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -62,7 +63,7 @@ export default {
 }
 
 .card > span.card-suit {
-    font-size: 3.5rem;
+    font-size: 4rem;
     font-weight: 700;
     position: absolute;
     top: 50%;

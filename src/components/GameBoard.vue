@@ -1,6 +1,7 @@
 <template>
   <main class="game-board">
-    <HandPlayer :playerHand="player.hand"/>
+    <HandPlayer :hand="dealer.hand" :score="dealer.score" :isDealer="true"/>
+    <HandPlayer :hand="player.hand" :score="player.score"/>
     <GameControl @hitPressed="dealCard('player')"/>
   </main>
 </template>
