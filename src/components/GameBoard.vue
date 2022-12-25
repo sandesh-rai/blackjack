@@ -1,17 +1,17 @@
 <template>
-  <div class="game-board">
-    <PlayerHand/>
-    <GameControl @hitPressed="hitPressed"/>
-  </div>
+  <main class="game-board">
+    <HandPlayer :playerHand="player.hand"/>
+    <GameControl @hitPressed="dealCard('player')"/>
+  </main>
 </template>
 
 <script>
 import GameControl from './GameControl.vue';
-import PlayerHand from './PlayerHand.vue';
+import HandPlayer from './HandPlayer.vue';
 
 export default {
     name: "GameBoard",
-    components: { PlayerHand, GameControl },
+    components: { HandPlayer, GameControl },
     data() {
       return {
         deckCards: [],
@@ -23,7 +23,7 @@ export default {
           hand: [],
           score: 0
         },
-        cardCount: 0
+        cardCount: 0,
       }
     },
     methods: {
@@ -56,18 +56,60 @@ export default {
       dealFirstTwoCards(){
         while (this.cardCount < 4) {
           // Player
-          this.player.hand.push(this.deckCards[this.cardCount]);
-          this.cardCount++;
+          this.dealCard('player');
 
           //Dealer
-          this.dealer.hand.push(this.deckCards[this.cardCount])
-          this.cardCount++;
+          this.dealCard('dealer');
         }
       },
-      hitPressed(){
-        this.player.hand.push(this.deckCards[this.cardCount]);
-        this.cardCount++;
-        console.log('HELLO!')
+      dealCard(receiver){
+        if (receiver === 'player') {
+          this.player.hand.push(this.deckCards[this.cardCount]);
+          this.calculateNewScore(this.deckCards[this.cardCount], receiver);
+          this.cardCount++;
+        }
+
+        if (receiver === 'dealer') {
+          this.dealer.hand.push(this.deckCards[this.cardCount]);
+          this.calculateNewScore(this.deckCards[this.cardCount], receiver);
+          this.cardCount++;
+        }
+        
+      },
+      calculateNewScore(cardStr, receiver){
+        cardStr = cardStr.slice(1);
+
+        if (receiver === 'player') {
+          if (/^\d+$/.test(cardStr)) {
+          //If  the string is a number
+          this.player.score += parseInt(cardStr);
+          } else if (['K', 'Q', 'J'].includes(cardStr)) {
+            this.player.score += 10;
+          } else {
+            if (this.player.score >= 10) {
+              // If card is an Ace
+              this.player.score += 11;
+            } else {
+              this.player.score += 1;
+            }
+          }
+        }
+        
+        if (receiver === 'dealer') {
+          if (/^\d+$/.test(cardStr)) {
+          //If  the string is a number
+          this.dealer.score += parseInt(cardStr);
+          } else if (['K', 'Q', 'J'].includes(cardStr)) {
+            this.dealer.score += 10;
+          } else {
+            if (this.dealer.score >= 10) {
+              // If card is an Ace
+              this.dealer.score += 11;
+            } else {
+              this.dealer.score += 1;
+            }
+          }
+        }
       }
     },
     created () {
