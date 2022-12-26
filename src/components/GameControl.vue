@@ -1,18 +1,30 @@
 <template>
     <div class="control">
-        <button @click="standPressed">STAND</button>
-        <button @click="hitPressed">HIT</button>
+        <button @click="standPressed" :style="(disableControl) ? 'pointer-events: none; opacity: 0.5; cursor: not-allowed;' : ''">STAND</button>
+        <button @click="hitPressed" :style="(disableControl) ? 'pointer-events: none; opacity: 0.5; cursor: not-allowed;' : ''">HIT</button>
     </div>
 </template>
 
 <script>    
     export default {
         name: "GameControl",
+        props: {
+            disableControl: {
+                type: Boolean,
+                default: false
+            },
+        },
         methods: {
             hitPressed(){
+                if (this.disableControl) {
+                    return;
+                }
                 this.$emit('hitPressed');
             },
             standPressed() {
+                if (this.disableControl) {
+                    return;
+                }
                 this.$emit('standPressed');
             },
         },
@@ -25,8 +37,10 @@
     justify-content: space-evenly;
     flex-grow: 1;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.2);
-    margin-top: 3rem;
+    background-color: rgba(255, 255, 255, 0.25);
+    margin: 3rem 3rem 0rem;
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
 }
 
 .control button {

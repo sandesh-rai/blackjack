@@ -2,7 +2,7 @@
   <main class="game-board">
     <HandCards :isDealer="true" :hand="dealer.hand" :score="(hideDealer) ? dealer.firstCardScore : dealer.score" :hideDealer="hideDealer"/>
     <HandCards :hand="player.hand" :score="player.score"/>
-    <GameControl @hitPressed="dealCard('player')" @standPressed="standPressed"/>
+    <GameControl @hitPressed="dealCard('player')" @standPressed="dealersTurn" :disableControl="disableControl"/>
   </main>
 </template>
 
@@ -26,7 +26,8 @@ export default {
           score: 0
         },
         cardCount: 0,
-        hideDealer: true
+        hideDealer: true,
+        disableControl: false
       }
     },
     methods: {
@@ -60,29 +61,46 @@ export default {
       return new Promise((resolve) => setTimeout(resolve, milliseconds));
       },
       async dealFirstTwoCards(){
+        this.disableControl = true;
         while (this.cardCount < 4) {
           // Player
-          this.dealCard('player');
+          this.dealCard('player', true);
           await this.animationDelay(500);
 
           //Dealer
-          this.dealCard('dealer');
+          this.dealCard('dealer', true);
           await this.animationDelay(500);
         }
+        this.disableControl = false;
       },
-      dealCard(receiver){
+      dealCard(receiver, firstCards = false){
+        this.disableControl = true;
+
         if (receiver === 'player') {
           this.player.hand.push(this.deckCards[this.cardCount]);
           this.calculateNewScore(this.deckCards[this.cardCount], receiver);
           this.cardCount++;
+
+          // Check new score
+          if (this.player.score === 21) {
+            this.dealersTurn();
+          } else if (this.player.score > 21) {
+            this.hideDealer = false;
+            this.restartGame();
+          } else {
+            if (!firstCards) {
+              this.disableControl = false;
+            }       
+          }
         }
 
         if (receiver === 'dealer') {
+          if (this.dealer.score >= this.player.score) return;
+
           this.dealer.hand.push(this.deckCards[this.cardCount]);
           this.calculateNewScore(this.deckCards[this.cardCount], receiver);
           this.cardCount++;
-        }
-        
+        } 
       },
       calculateNewScore(cardStr, receiver){
         cardStr = cardStr.slice(1);
@@ -126,8 +144,36 @@ export default {
           }
         }
       },
-      standPressed(){
+      async dealersTurn(){
+        this.disableControl = true;
         this.hideDealer = false;
+
+        while (this.dealer.score < this.player.score) {
+          this.dealCard('dealer');
+          await this.animationDelay(500);
+        }
+
+        this.restartGame();
+      },
+      async restartGame(){
+        await this.animationDelay(2000);
+
+        this.shuffleCards();
+        this.cardCount = 0;
+        this.hideDealer = true;
+
+        this.dealer = {
+          hand: [],
+          score: 0,
+          firstCardScore: 0,
+        };
+
+        this.player =  {
+          hand: [],
+          score: 0
+        };
+
+        this.dealFirstTwoCards();
       }
     },
     created () {

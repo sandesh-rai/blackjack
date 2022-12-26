@@ -4,7 +4,10 @@
             <span>
                 <template v-if="isDealer">Dealer's Hand: </template>
                 <template v-else>Player's Hand: </template>
-                {{score}}
+                
+                <template v-if="hand.length > 1">
+                    {{score}}
+                </template>
             </span>
         </h2>
        
