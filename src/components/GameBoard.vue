@@ -59,22 +59,24 @@ export default {
         }
       }, 
       animationDelay(milliseconds) {
-      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+        return new Promise((resolve) => setTimeout(resolve, milliseconds));
       },
       async dealFirstTwoCards(){
         this.disableControl = true;
         while (this.cardCount < 4) {
           // Player
-          this.dealCard('player', true);
-          await this.animationDelay(500);
+          if (this.player.hand.length < 2) {
+            await this.dealCard('player', true);
+          }
 
           //Dealer
-          this.dealCard('dealer', true);
-          await this.animationDelay(500);
+          if (this.dealer.hand.length < 2) {
+            await this.dealCard('dealer', true);
+          }
         }
         this.disableControl = false;
       },
-      dealCard(receiver, firstCards = false){
+      async dealCard(receiver, firstCards = false){
         this.disableControl = true;
 
         if (receiver === 'player') {
@@ -103,6 +105,8 @@ export default {
           this.calculateNewScore(this.deckCards[this.cardCount], receiver);
           this.cardCount++;
         } 
+
+        await this.animationDelay(700);
       },
       calculateNewScore(cardStr, receiver){
         cardStr = cardStr.slice(1);
@@ -151,7 +155,7 @@ export default {
         this.hideDealer = false;
 
         while (this.dealer.score < this.player.score) {
-          this.dealCard('dealer');
+          await this.dealCard('dealer');
           this.checkGameStatus();
         }
 
