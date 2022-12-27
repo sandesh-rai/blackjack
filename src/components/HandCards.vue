@@ -17,12 +17,14 @@
                     <PlayingCard :card="card" :hideCard="hideLastCardForDealer(index)"/>
                 </div>
             </TransitionGroup>
+            <HandCardsResult :score="score"/>
         </div>
     </section>
 </template>
 
 <script>
 import PlayingCard from './PlayingCard.vue';
+import HandCardsResult from './HandCardsResult.vue';
 
 export default {
     name: "HandCards",
@@ -43,7 +45,7 @@ export default {
             default: false
         }
     },
-    components: { PlayingCard },
+    components: { PlayingCard, HandCardsResult },
     methods: {
         hideLastCardForDealer(cardIndex) {
             return this.isDealer && cardIndex == 1 && this.hideDealer;
@@ -53,6 +55,10 @@ export default {
 </script>
 
 <style scoped>
+.player-hand {
+    position: relative;
+}
+
 section {
     min-height: 330px;
 }
