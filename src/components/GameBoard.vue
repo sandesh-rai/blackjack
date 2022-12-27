@@ -2,17 +2,17 @@
   <main class="game-board">
     <HandCards :isDealer="true" :hand="dealer.hand" :score="(hideDealer) ? dealer.firstCardScore : dealer.score" :hideDealer="hideDealer"/>
     <HandCards :hand="player.hand" :score="player.score"/>
-    <GameControl @hitPressed="dealCard('player')" @standPressed="dealersTurn" :disableControl="disableControl"/>
+    <GameMenu @hitPressed="dealCard('player')" @standPressed="dealersTurn" :disableControl="disableControl" :gameStatusMessage="gameStatusMessage"/>
   </main>
 </template>
 
 <script>
-import GameControl from './GameControl.vue';
+import GameMenu from './GameMenu.vue';
 import HandCards from './HandCards.vue';
 
 export default {
     name: "GameBoard",
-    components: { HandCards, GameControl },
+    components: { HandCards, GameMenu },
     data() {
       return {
         deckCards: [],
@@ -27,7 +27,8 @@ export default {
         },
         cardCount: 0,
         hideDealer: true,
-        disableControl: false
+        disableControl: false,
+        gameStatusMessage: ''
       }
     },
     methods: {
@@ -86,6 +87,7 @@ export default {
             this.dealersTurn();
           } else if (this.player.score > 21) {
             this.hideDealer = false;
+            this.gameStatusMessage = 'You lose!';
             this.restartGame();
           } else {
             if (!firstCards) {
@@ -150,13 +152,15 @@ export default {
 
         while (this.dealer.score < this.player.score) {
           this.dealCard('dealer');
-          await this.animationDelay(500);
+          this.checkGameStatus();
         }
+
+        this.checkGameStatus();
 
         this.restartGame();
       },
       async restartGame(){
-        await this.animationDelay(2000);
+        await this.animationDelay(2500);
 
         this.shuffleCards();
         this.cardCount = 0;
@@ -172,8 +176,22 @@ export default {
           hand: [],
           score: 0
         };
-
+        this.gameStatusMessage = '';
         this.dealFirstTwoCards();
+      },
+      checkGameStatus(){
+        if (this.dealer.score >= this.player.score) {
+            if (this.dealer.score > 21) {
+              this.gameStatusMessage = 'You win!';
+            } else if (this.dealer.score === 21 && this.player.score !== 21) {
+              this.gameStatusMessage = 'Dealer wins!';
+            } else if ((this.dealer.score === 21 && this.player.score === 21) || (this.dealer.score === this.player.score)) {
+              this.gameStatusMessage = 'PUSH!';
+            } else if (this.dealer.score < 21) {
+              this.gameStatusMessage= 'Dealer wins!';
+            }
+
+          }
       }
     },
     created () {

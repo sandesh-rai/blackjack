@@ -1,34 +1,43 @@
 <template>
     <div class="control">
         <button @click="standPressed" :style="(disableControl) ? 'pointer-events: none; opacity: 0.5; cursor: not-allowed;' : ''">STAND</button>
+        <GameMenuMessage :message="gameStatusMessage"/>
         <button @click="hitPressed" :style="(disableControl) ? 'pointer-events: none; opacity: 0.5; cursor: not-allowed;' : ''">HIT</button>
     </div>
 </template>
 
-<script>    
+<script>
+import GameMenuMessage from './GameMenuMessage.vue';
+
+    
     export default {
-        name: "GameControl",
-        props: {
-            disableControl: {
-                type: Boolean,
-                default: false
-            },
+    name: "GameMenu",
+    props: {
+        disableControl: {
+            type: Boolean,
+            default: false
         },
-        methods: {
-            hitPressed(){
-                if (this.disableControl) {
-                    return;
-                }
-                this.$emit('hitPressed');
-            },
-            standPressed() {
-                if (this.disableControl) {
-                    return;
-                }
-                this.$emit('standPressed');
-            },
+        gameStatusMessage: {
+            type: String,
+            default: ''
+        }
+    },
+    methods: {
+        hitPressed() {
+            if (this.disableControl) {
+                return;
+            }
+            this.$emit("hitPressed");
         },
-    };
+        standPressed() {
+            if (this.disableControl) {
+                return;
+            }
+            this.$emit("standPressed");
+        },
+    },
+    components: { GameMenuMessage }
+};
 </script>
 
 <style scoped>
@@ -63,5 +72,20 @@
   box-shadow: 0px 4px 8px #333;
   -webkit-transform: scale(0.98);
   transform: scale(0.98);
+}
+
+.game-status {
+    height: 60%;
+    vertical-align: center;
+    display: flex;
+    align-items: center;
+    width: 30%;
+    justify-content: center;
+    background-color: black;
+    border: 2px solid white;
+    border-radius: 16px;
+    color: white;
+    font-size: 2rem;
+    user-select: none;
 }
 </style>
