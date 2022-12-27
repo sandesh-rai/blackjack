@@ -49,7 +49,7 @@ export default {
     position: relative;
     background-color: white;
     border-radius: 1rem;
-    border: 4px solid black;
+    border: none;
     margin: 1rem 0.5rem;
     -webkit-touch-callout: none;
     -webkit-user-select: none;

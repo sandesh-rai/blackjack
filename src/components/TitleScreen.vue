@@ -3,15 +3,23 @@
         <div class="title-screen-content">
           <h2>Blackjack Game</h2>
           <h3>Created by Sandesh Rai</h3>
+          <div class="cards-row">
+            <PlayingCard card="HK"/>
+            <PlayingCard card="CQ"/>
+            <PlayingCard card="DJ"/>
+          </div>
           <button @click="$emit('startPressed')">Start game</button>
         </div>
     </section>
 </template>
 
 <script>
+import PlayingCard from './PlayingCard.vue';
+
     export default {
-        name: "TitleScreen"
-    }
+    name: "TitleScreen",
+    components: { PlayingCard }
+}
 </script>
 
 <style scoped>
@@ -48,6 +56,12 @@ h2 {
 h3 {
     font-size: 1.75rem;
     color: white;
+}
+
+.cards-row {
+    display: flex;
+    justify-content: center;
+    transform: scale(0.8);
 }
 
 </style>
