@@ -1,18 +1,23 @@
 <template>
-  <main class="game-board">
-    <HandCards :isDealer="true" :hand="dealer.hand" :score="(hideDealer) ? dealer.firstCardScore : dealer.score" :hideDealer="hideDealer"/>
-    <HandCards :hand="player.hand" :score="player.score"/>
-    <GameMenu @hitPressed="dealCard('player')" @standPressed="dealersTurn" :disableControl="disableControl" :gameStatusMessage="gameStatusMessage"/>
+  <main style="position: relative">
+      <div v-if="start" class="game-board">
+        <HandCards :isDealer="true" :hand="dealer.hand" :score="(hideDealer) ? dealer.firstCardScore : dealer.score" :hideDealer="hideDealer"/>
+        <HandCards :hand="player.hand" :score="player.score"/>
+        <GameMenu @hitPressed="dealCard('player')" @standPressed="dealersTurn" :disableControl="disableControl" :gameStatusMessage="gameStatusMessage"/>
+      </div>
+      <TitleScreen v-else @startPressed="startPressed"/>
+
   </main>
 </template>
 
 <script>
 import GameMenu from './GameMenu.vue';
 import HandCards from './HandCards.vue';
+import TitleScreen from './TitleScreen.vue'
 
 export default {
     name: "GameBoard",
-    components: { HandCards, GameMenu },
+    components: { HandCards, GameMenu, TitleScreen },
     data() {
       return {
         deckCards: [],
@@ -27,8 +32,9 @@ export default {
         },
         cardCount: 0,
         hideDealer: true,
-        disableControl: false,
-        gameStatusMessage: ''
+        disableControl: true,
+        gameStatusMessage: '',
+        start: false,
       }
     },
     methods: {
@@ -57,7 +63,12 @@ export default {
           this.deckCards[curr] = this.deckCards[rand];
           this.deckCards[rand] = currCard;
         }
-      }, 
+      },
+      async startPressed(){
+        this.start = true;
+        await this.animationDelay(700);
+        this.dealFirstTwoCards();
+      },
       animationDelay(milliseconds) {
         return new Promise((resolve) => setTimeout(resolve, milliseconds));
       },
@@ -201,10 +212,7 @@ export default {
     created () {
       this.createDeck();
       this.shuffleCards();
-    },
-    mounted () {
-      this.dealFirstTwoCards();
-    },
+    }
 }
 </script>
 
@@ -214,4 +222,5 @@ export default {
     flex-direction: column;
     height: 100vh;
   }
+
 </style>
