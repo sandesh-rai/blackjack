@@ -221,6 +221,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    justify-content: space-between;
   }
 
 </style>

@@ -60,7 +60,7 @@ export default {
 }
 
 .hidden-card {
-    border: 4px solid white;
+    border: 2px solid white;
     background: repeating-linear-gradient(
         45deg,
         #bc1616,

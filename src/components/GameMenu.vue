@@ -50,6 +50,7 @@ import GameMenuMessage from './GameMenuMessage.vue';
     margin: 3rem 3rem 0rem;
     border-top-left-radius: 100px;
     border-top-right-radius: 100px;
+    max-height: 125px;
 }
 
 .control button {

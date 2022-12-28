@@ -1,14 +1,12 @@
 <template>
     <section>
         <h2>
-            <span>
                 <template v-if="isDealer">Dealer's Hand: </template>
                 <template v-else>Player's Hand: </template>
                 
                 <template v-if="hand.length > 1">
                     {{score}}
                 </template>
-            </span>
         </h2>
        
         <div class="player-hand">
@@ -60,7 +58,7 @@ export default {
 }
 
 section {
-    min-height: 330px;
+    min-height: 300px;
 }
 .player-hand > div {
     display: flex;
@@ -71,11 +69,8 @@ section > h2 {
     text-align: center;
     color: #fff;
     font-weight: 700;
-    margin-top: 3rem;
+    margin-top: 1rem;
     font-size: 2rem;
-}
-
-section > h2 > span {
     background-color: rgba(255, 255, 255, 0.2);
     padding: 0.25rem 1.25rem;
     border-radius: 1rem;
