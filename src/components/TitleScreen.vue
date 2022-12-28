@@ -45,25 +45,26 @@ import PlayingCard from './PlayingCard.vue';
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 50vh;
-    width: 50vw;
+    height: auto;
+    width: 60%;
     background-color: rgba(255, 255, 255, 0.25);
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 32px;
-    padding: 4rem;
+    padding: clamp(1rem, 3.5vw ,4rem);
 }
 
 h2 {
-    font-size: 3rem;
+    font-size: clamp(2rem, 5.5vw, 3rem);
     color: white;
 }
 
 h3 {
-    font-size: 1.75rem;
+    font-size: clamp(1rem, 2.5vw, 1.75rem);
     color: white;
+    padding-top: 1rem;
 }
 
 .cards-row {
@@ -81,6 +82,19 @@ h3 {
 .buttons-row > button {
     width: 15rem;
     min-width: 10rem;
+    margin-top: 1rem;
+}
+
+@media only screen and (max-width: 800px) {
+    .title-screen-content{
+        width: 75%
+    }
+
+    .buttons-row > button {
+        font-size: 1rem;
+        padding: 1rem;
+        width: 10rem;
+    }
 }
 
 </style>
