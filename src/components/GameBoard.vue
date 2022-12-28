@@ -97,6 +97,7 @@ export default {
 
           // Check new score
           if (this.player.score === 21) {
+            await this.animationDelay(700);
             this.dealersTurn();
           } else if (this.player.score > 21) {
             this.hideDealer = false;
@@ -110,14 +111,16 @@ export default {
         }
 
         if (receiver === 'dealer') {
-          if (this.dealer.score >= this.player.score) return;
+          if (this.dealer.score >= this.player.score && !firstCards) return;
 
           this.dealer.hand.push(this.deckCards[this.cardCount]);
           this.calculateNewScore(this.deckCards[this.cardCount], receiver);
           this.cardCount++;
         } 
 
-        await this.animationDelay(700);
+        if (receiver === 'dealer' || firstCards) {
+          await this.animationDelay(700);
+        }
       },
       calculateNewScore(cardStr, receiver){
         cardStr = cardStr.slice(1);
