@@ -8,7 +8,10 @@
             <PlayingCard card="CQ"/>
             <PlayingCard card="DJ"/>
           </div>
-          <button @click="$emit('startPressed')">Start game</button>
+          <div class="buttons-row">
+            <button @click="openLink">View LinkedIn</button>
+            <button @click="$emit('startPressed')">Start game</button>
+          </div>
         </div>
     </section>
 </template>
@@ -18,7 +21,12 @@ import PlayingCard from './PlayingCard.vue';
 
     export default {
     name: "TitleScreen",
-    components: { PlayingCard }
+    components: { PlayingCard },
+    methods: {
+        openLink() {
+            window.open('https://www.linkedin.com/in/sandesh-rai','_blank');
+        }
+    },
 }
 </script>
 
@@ -62,6 +70,17 @@ h3 {
     display: flex;
     justify-content: center;
     transform: scale(0.8);
+}
+
+.buttons-row{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.buttons-row > button {
+    width: 15rem;
+    min-width: 10rem;
 }
 
 </style>

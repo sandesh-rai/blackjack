@@ -110,10 +110,7 @@ export default {
         }
 
         if (receiver === 'dealer') {
-          if (this.dealer.score >= this.player.score) {
-            await this.animationDelay(700);
-            return;
-          }
+          if (this.dealer.score >= this.player.score) return;
 
           this.dealer.hand.push(this.deckCards[this.cardCount]);
           this.calculateNewScore(this.deckCards[this.cardCount], receiver);
