@@ -79,6 +79,11 @@ import GameMenuMessage from './GameMenuMessage.vue';
     margin: 0;
     border-radius: 0px;
   }
+
+  .control button {
+    font-size: 1rem;
+    padding: 1rem;
+  }
 }
 
 </style>
