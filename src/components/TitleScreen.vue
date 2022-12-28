@@ -4,9 +4,9 @@
           <h2>Blackjack Game</h2>
           <h3>Created by Sandesh Rai</h3>
           <div class="cards-row">
-            <PlayingCard card="HK"/>
-            <PlayingCard card="CQ"/>
-            <PlayingCard card="DJ"/>
+            <PlayingCard card="HK" :card-spin="true"/>
+            <PlayingCard card="CQ" :card-spin="true"/>
+            <PlayingCard card="DJ" :card-spin="true"/>
           </div>
           <div class="buttons-row">
             <button @click="openLink">View LinkedIn</button>
