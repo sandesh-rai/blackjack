@@ -21,12 +21,9 @@ export default {
 
 html, body {
   margin: 0;
-  height: 100%;
-  overflow: hidden
-  }
+}
 
 body {
-  background-color: darkgreen;
   background: radial-gradient(ellipse at bottom, darkgreen 0%, #030617 100%);
 }
 

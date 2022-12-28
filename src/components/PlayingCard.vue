@@ -86,4 +86,49 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+@media only screen and (max-width: 769px) {
+    .card {
+    height: 9rem;
+    width: 6rem;
+    }
+
+    .card > span.card-val {
+        font-size: 1.75rem;
+    }
+
+    .card > span.card-suit {
+        font-size: 3rem;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .card {
+    height: 9rem;
+    width: 6rem;
+    }
+
+    .card > span.card-val {
+        font-size: 1.75rem;
+    }
+
+    .card > span.card-suit {
+        font-size: 3rem;
+    }
+}
+
+@media only screen and (max-width: 680px) {
+    .card {
+    height: 7rem;
+    width: 4rem;
+    }
+
+    .card > span.card-val {
+        font-size: 1.75rem;
+    }
+
+    .card > span.card-suit {
+        font-size: 3rem;
+    }
+}
 </style>

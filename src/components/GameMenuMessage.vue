@@ -31,4 +31,10 @@
     font-size: 2rem;
     user-select: none;
 }
+
+@media only screen and (max-width: 769px) {
+  .game-status {
+    display: none;
+  }
+}
 </style>

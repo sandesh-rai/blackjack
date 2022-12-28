@@ -74,18 +74,11 @@ import GameMenuMessage from './GameMenuMessage.vue';
   transform: scale(0.98);
 }
 
-.game-status {
-    height: 60%;
-    vertical-align: center;
-    display: flex;
-    align-items: center;
-    width: 30%;
-    justify-content: center;
-    background-color: black;
-    border: 2px solid white;
-    border-radius: 16px;
-    color: white;
-    font-size: 2rem;
-    user-select: none;
+@media only screen and (max-width: 769px) {
+  .control {
+    margin: 0;
+    border-radius: 0px;
+  }
 }
+
 </style>

@@ -55,6 +55,7 @@ export default {
 <style scoped>
 .player-hand {
     position: relative;
+    min-height: 224px;
 }
 
 section {
@@ -63,13 +64,15 @@ section {
 .player-hand > div {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 section > h2 {
     text-align: center;
     color: #fff;
     font-weight: 700;
-    margin-top: 1rem;
+    margin: 1rem auto 0;
+    max-width: 70%;
     font-size: 2rem;
     background-color: rgba(255, 255, 255, 0.2);
     padding: 0.25rem 1.25rem;
@@ -80,6 +83,13 @@ section > h2 {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+@media only screen and (max-width: 769px) {
+    section > h2 {
+        border-radius: 0;
+        max-width: 100%;
+  }
 }
 
 .cards-move,
