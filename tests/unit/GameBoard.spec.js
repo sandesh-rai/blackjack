@@ -21,16 +21,24 @@ describe('GameBoard.vue', () => {
         await Vue.nextTick()
 
         // Fake animation delay timers for first 4 cards dealt on start
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 4*3; i++) {
+            jest.runOnlyPendingTimers()
+            await Vue.nextTick()
             jest.runOnlyPendingTimers()
             await Vue.nextTick()
             jest.runOnlyPendingTimers()
             await Vue.nextTick()
         }
-
-        jest.runOnlyPendingTimers()
-        await Vue.nextTick()
     } 
+
+    async function pressHit () {
+        // Check HIT button is not disabled
+        expect(wrapper.vm.$data.disableControl).toBe(false)
+
+        // Click HIT button
+        expect(wrapper.findAll('button').at(1).text()).toBe('HIT')
+        await wrapper.findAll('button').at(1).trigger('click')
+    }
 
     beforeEach(() => {
         wrapper = mount(GameBoard)
@@ -59,12 +67,7 @@ describe('GameBoard.vue', () => {
     // Player should only have 2 cards
     expect(wrapper.vm.$data.player.hand.length).toBe(2)
 
-    // Check HIT button is not disabled
-    expect(wrapper.vm.$data.disableControl).toBe(false)
-
-    // Click HIT button
-    expect(wrapper.findAll('button').at(1).text()).toBe('HIT')
-    await wrapper.findAll('button').at(1).trigger('click')
+    await pressHit()
 
     // Player should now have 3 cards
     expect(wrapper.vm.$data.player.hand.length).toBe(3)
@@ -96,13 +99,10 @@ describe('GameBoard.vue', () => {
   })
 
   it('checks correct dealer score is calculated after starting game', async () => {
-
     await startGame()
 
     let expectedScoreDealer = 0
     let displayedScoreDealer = 0
-
-    let cardVal = wrapper.vm.$data.dealer.hand[0].slice(1)
 
     // Calculate player expected score
     for (let i = 0; i < wrapper.vm.$data.dealer.hand.length; i++) {
@@ -130,6 +130,33 @@ describe('GameBoard.vue', () => {
     // Dealer displayed score (first card score only)
     expect(wrapper.vm.$data.dealer.firstCardScore).toBe(displayedScoreDealer) 
     expect(wrapper.findAll('h2').at(0).html().replace(/\s/g, '')).toContain(`<h2>Dealer'sHand:${displayedScoreDealer}</h2>`)
-        
+  })
+
+  it('checks correct score is evaluated after pressing hit', async () => {
+    await startGame()
+
+    let currentScore = parseInt(wrapper.vm.$data.player.score)
+    expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:${currentScore}</h2>`)
+
+    await pressHit()
+
+    // Get value of the card that's just been added to hand
+    let cardVal = wrapper.vm.$data.player.hand.slice(-1)[0].slice(1)
+    
+    if (["K", "Q", "J"].includes(cardVal)) {
+        currentScore += 10
+    } else if (cardVal === "A"){
+        // Treat ace as a 1 if adding 11 would exceed score of 21
+        if (currentScore <= 10) {
+            currentScore += 11
+        } else {
+            currentScore += 1
+        }
+    } else {
+        // Number card
+        currentScore += parseInt(cardVal)
+    }
+
+    expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:${currentScore}</h2>`)
   })
 })
