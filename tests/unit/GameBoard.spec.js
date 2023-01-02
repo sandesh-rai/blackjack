@@ -31,6 +31,22 @@ describe('GameBoard.vue', () => {
         }
     } 
 
+    async function restartGame () {
+        // Wait for game to restart
+        jest.runOnlyPendingTimers()
+        await Vue.nextTick()
+
+        // Fake animation delay timers for first 4 cards dealt on start
+        for (let i = 0; i < 4*3; i++) {
+            jest.runOnlyPendingTimers()
+            await Vue.nextTick()
+            jest.runOnlyPendingTimers()
+            await Vue.nextTick()
+            jest.runOnlyPendingTimers()
+            await Vue.nextTick()
+        }
+    }
+
     async function pressHit () {
         // Check HIT button is not disabled
         expect(wrapper.vm.$data.disableControl).toBe(false)
@@ -158,5 +174,49 @@ describe('GameBoard.vue', () => {
     }
 
     expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:${currentScore}</h2>`)
+  })
+
+  it('checks player is bust when their score exceeds 21', async () => {
+    await startGame()
+
+    let currentScore = parseInt(wrapper.vm.$data.player.score)
+    expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:${currentScore}</h2>`)
+
+    // Continue pressing hit until score exceeds 21
+    while (currentScore <= 21) {
+        if (currentScore === 21) {
+            // Restart game if it's a blackjack
+            await restartGame()
+        } else {
+            await pressHit()
+        }
+        currentScore = parseInt(wrapper.vm.$data.player.score)
+    }
+    
+    expect(wrapper.findAll('.message').at(1).text()).toBe('BUST!')
+
+  })
+
+  it('checks blackjack result when player gets score of 21', async () => {
+    await startGame()
+
+    let currentScore = parseInt(wrapper.vm.$data.player.score)
+    expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:${currentScore}</h2>`)
+
+    // Continue game until blackjack reached
+    while (currentScore !== 21) {
+        if (currentScore === 21) {
+            // Blackjack
+            break;
+            
+        } else if (currentScore < 21) {
+            await pressHit()
+        } else {
+            await restartGame()
+        }
+        currentScore = parseInt(wrapper.vm.$data.player.score)
+    }
+    
+    expect(wrapper.findAll('.message').at(1).text()).toBe('Blackjack!')
   })
 })
