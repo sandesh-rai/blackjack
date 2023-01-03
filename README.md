@@ -11,6 +11,10 @@ This is a basic Blackjack game created with Vue.js:
 
   <img src="https://github.com/sandesh-rai/blackjack/blob/main/src/assets/Game-Desktop.png" alt="game-desktop"/>
   
+## Play the game 🎮🃏
+
+https://sandesh-rai.github.io/blackjack/ 
+  
 ## Rules/ Mechanics
 - Player and dealer start with 2 cards each
 - Player starts and can choose to hit as long as they don't exceed a score of 21
@@ -25,8 +29,6 @@ You can clone this repository using __Git__:
 ```bash
 git clone https://github.com/sandesh-rai/blackjack.git
 ```
-
----
 
 Installing the dependencies:
 ```bash
