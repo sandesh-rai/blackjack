@@ -1,5 +1,9 @@
 # ♠️ ♥️ Blackjack ♣️ ♦️
 
+## Play the game 🎮🃏
+
+https://sandesh-rai.github.io/blackjack/ 
+
 ## Introduction
 
 This is a basic Blackjack game created with Vue.js:
@@ -9,11 +13,7 @@ This is a basic Blackjack game created with Vue.js:
 - Incorporates reponsive web design
 - Accessibility: game can be played with keyboard (Tab and Enter keys)
 
-  <img src="https://github.com/sandesh-rai/blackjack/blob/main/src/assets/Game-Desktop.png" alt="game-desktop"/>
-  
-## Play the game 🎮🃏
-
-https://sandesh-rai.github.io/blackjack/ 
+<img src="https://github.com/sandesh-rai/blackjack/blob/main/src/assets/Game-Desktop.png" alt="game-desktop"/>
   
 ## Rules/ Mechanics
 - Player and dealer start with 2 cards each
