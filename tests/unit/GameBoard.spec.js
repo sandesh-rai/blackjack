@@ -176,7 +176,7 @@ describe('GameBoard.vue', () => {
     expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:${currentScore}</h2>`)
   })
 
-  it('checks player is bust when their score exceeds 21', async () => {
+  it('checks player can hit when score is less than 21, and is bust when their score exceeds 21', async () => {
     await startGame()
 
     let currentScore = parseInt(wrapper.vm.$data.player.score)
@@ -188,6 +188,7 @@ describe('GameBoard.vue', () => {
             // Restart game if it's a blackjack
             await restartGame()
         } else {
+            // Player can hit when score is less than 21
             await pressHit()
         }
         currentScore = parseInt(wrapper.vm.$data.player.score)
@@ -219,4 +220,14 @@ describe('GameBoard.vue', () => {
     
     expect(wrapper.findAll('.message').at(1).text()).toBe('Blackjack!')
   })
+
+  // Press 'stand' and dealer's turn
+
+  // Press 'stand' and dealer's turn - dealer wins without exactly 21
+
+  // Press 'stand' and dealer's turn - dealer wins with exactly 21
+
+  // Press 'stand' and dealer's turn - dealer busts
+
+  // Press 'stand' and PUSH
 })
