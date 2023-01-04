@@ -56,6 +56,15 @@ describe('GameBoard.vue', () => {
         await wrapper.findAll('button').at(1).trigger('click')
     }
 
+    async function pressStand () {
+        // Check stand button is not disabled
+        expect(wrapper.vm.$data.disableControl).toBe(false)
+
+        // Click Stand button
+        expect(wrapper.findAll('button').at(0).text()).toBe('STAND')
+        await wrapper.findAll('button').at(0).trigger('click')
+    }
+
     beforeEach(() => {
         wrapper = mount(GameBoard)
     })
@@ -64,12 +73,12 @@ describe('GameBoard.vue', () => {
         wrapper = null;
     });
       
-  it('checks 52 cards are generated', () => {
+  it('should generate 52 cards to deck', () => {
 
     expect(wrapper.vm.$data.deckCards.length).toBe(52)
   })
 
-  it('deals 2 cards each to player and dealer after starting game', async () => {
+  it('should deal 2 cards each to player and dealer after starting game', async () => {
     await startGame()
     
     // Player and dealer should now have 2 cards each
@@ -77,7 +86,7 @@ describe('GameBoard.vue', () => {
     expect(wrapper.vm.$data.dealer.hand.length).toBe(2)
   })
 
-  it('checks clicking hit button adds a card to the hand', async () => {
+  it('should add a card to player hand after clicking hit button', async () => {
     await startGame()
 
     // Player should only have 2 cards
@@ -89,7 +98,7 @@ describe('GameBoard.vue', () => {
     expect(wrapper.vm.$data.player.hand.length).toBe(3)
   })
 
-  it('checks correct player score is calculated after starting game', async () => {
+  it('should show correct player score after starting game', async () => {
     await startGame()
 
     let expectedScorePlayer = 0
@@ -114,7 +123,7 @@ describe('GameBoard.vue', () => {
     expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:${expectedScorePlayer}</h2>`) 
   })
 
-  it('checks correct dealer score is calculated after starting game', async () => {
+  it('should show correct dealer score after starting game', async () => {
     await startGame()
 
     let expectedScoreDealer = 0
@@ -148,7 +157,7 @@ describe('GameBoard.vue', () => {
     expect(wrapper.findAll('h2').at(0).html().replace(/\s/g, '')).toContain(`<h2>Dealer'sHand:${displayedScoreDealer}</h2>`)
   })
 
-  it('checks correct score is evaluated after pressing hit', async () => {
+  it('should update player score after pressing hit and new card is dealt', async () => {
     await startGame()
 
     let currentScore = parseInt(wrapper.vm.$data.player.score)
@@ -176,7 +185,7 @@ describe('GameBoard.vue', () => {
     expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:${currentScore}</h2>`)
   })
 
-  it('checks player can hit when score is less than 21, and is bust when their score exceeds 21', async () => {
+  it('should allow player to hit when score is less than 21, and bust when their score exceeds 21', async () => {
     await startGame()
 
     let currentScore = parseInt(wrapper.vm.$data.player.score)
@@ -198,7 +207,7 @@ describe('GameBoard.vue', () => {
 
   })
 
-  it('checks blackjack result when player gets score of 21', async () => {
+  it('should show blacjack result when player score is 21', async () => {
     await startGame()
 
     let currentScore = parseInt(wrapper.vm.$data.player.score)
@@ -221,13 +230,64 @@ describe('GameBoard.vue', () => {
     expect(wrapper.findAll('.message').at(1).text()).toBe('Blackjack!')
   })
 
-  // Press 'stand' and dealer's turn
+it('should allow player to stand when their score is less than 21, and evaluate a winning game result', async () => {
 
-  // Press 'stand' and dealer's turn - dealer wins without exactly 21
+    // Give player a winning hand of 20 (HK, HQ), and dealer a losing hand of 22 (CK, C2, CQ)
+    let modifiedDeck = ['HK', 'CK', 'HQ', 'C2', 'CQ',  ...wrapper.vm.$data.deckCards]
+    await wrapper.setData({ deckCards: modifiedDeck })
+    
+    await startGame()
 
-  // Press 'stand' and dealer's turn - dealer wins with exactly 21
+    // Press stand
+    await pressStand()
 
-  // Press 'stand' and dealer's turn - dealer busts
+    for (let i = 0; i < wrapper.vm.$data.dealer.hand.length - 2; i++) {
+        jest.runOnlyPendingTimers()
+        await Vue.nextTick()
+        jest.runOnlyPendingTimers()
+        await Vue.nextTick()
+    }
 
-  // Press 'stand' and PUSH
+    // Expect winning player score of 20, and losing dealer hand of 22
+    expect(wrapper.findAll('h2').at(0).html().replace(/\s/g, '')).toContain(`<h2>Dealer'sHand:22</h2>`)
+    expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:20</h2>`)
+
+    expect(wrapper.findAll('.game-status').at(0).text()).toBe('You win!')
+  })
+
+  it('should allow player to stand when their score is less than 21, and evaluate a losing game result', async () => {
+
+    // Give player a losing hand of 19 (HK, H9), and dealer a winning hand of 20 (CK, CQ)
+    let modifiedDeck = ['HK', 'CK', 'H9', 'CQ',  ...wrapper.vm.$data.deckCards]
+    await wrapper.setData({ deckCards: modifiedDeck })
+    
+    await startGame()
+
+    // Press stand
+    await pressStand()
+
+    // Expect winning dealer hand of 20, and losing player hand of 19
+    expect(wrapper.findAll('h2').at(0).html().replace(/\s/g, '')).toContain(`<h2>Dealer'sHand:20</h2>`)
+    expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:19</h2>`)
+
+    expect(wrapper.findAll('.game-status').at(0).text()).toBe('Dealer wins!')
+  })
+
+  it('should allow player to stand when their score is less than 21, and evaluate a PUSH game result', async () => {
+
+    // Give player a hand of 20 (HK, HQ), and also dealer hand of 20 (CK, CQ)
+    let modifiedDeck = ['HK', 'CK', 'HQ', 'CQ',  ...wrapper.vm.$data.deckCards]
+    await wrapper.setData({ deckCards: modifiedDeck })
+    
+    await startGame()
+
+    // Press stand
+    await pressStand()
+
+    // Expect hand of 20 for both dealer and player
+    expect(wrapper.findAll('h2').at(0).html().replace(/\s/g, '')).toContain(`<h2>Dealer'sHand:20</h2>`)
+    expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:20</h2>`)
+
+    expect(wrapper.findAll('.game-status').at(0).text()).toBe('PUSH!')
+  })
 })
