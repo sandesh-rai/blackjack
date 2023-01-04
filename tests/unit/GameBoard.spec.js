@@ -6,8 +6,6 @@ describe('GameBoard.vue', () => {
     let wrapper
 
     async function startGame (){
-        jest.useFakeTimers();
-    
         // No cards have yet been dealt to player or dealer
         expect(wrapper.vm.$data.dealer.hand.length).toBe(0)
         expect(wrapper.vm.$data.dealer.hand.length).toBe(0)
@@ -67,6 +65,9 @@ describe('GameBoard.vue', () => {
 
     beforeEach(() => {
         wrapper = mount(GameBoard)
+        
+        // Use fake timers for skipping animation delay timers which are setup on the frontend
+        jest.useFakeTimers();
     })
     afterEach(() => {
         wrapper.destroy();
@@ -74,7 +75,6 @@ describe('GameBoard.vue', () => {
     });
       
   it('should generate 52 cards to deck', () => {
-
     expect(wrapper.vm.$data.deckCards.length).toBe(52)
   })
 
@@ -207,7 +207,7 @@ describe('GameBoard.vue', () => {
 
   })
 
-  it('should show blacjack result when player score is 21', async () => {
+  it('should show blackjack result when player score is 21', async () => {
     await startGame()
 
     let currentScore = parseInt(wrapper.vm.$data.player.score)
@@ -289,5 +289,53 @@ it('should allow player to stand when their score is less than 21, and evaluate 
     expect(wrapper.findAll('h2').at(1).html().replace(/\s/g, '')).toContain(`<h2>Player'sHand:20</h2>`)
 
     expect(wrapper.findAll('.game-status').at(0).text()).toBe('PUSH!')
+  })
+
+  it('should show player score of 21 with a king and ace', async () => {
+
+    // Give player a hand of 21 (HK, HA)
+    let modifiedDeck = ['HK', 'CK', 'HA',  ...wrapper.vm.$data.deckCards]
+    await wrapper.setData({ deckCards: modifiedDeck })
+
+    // Trigger start game button
+    expect(wrapper.findAll('button').at(1).text()).toBe('Start game')
+    await wrapper.findAll('button').at(1).trigger('click')
+
+    // Fake first animation delay timer that gets called when start button is pressed
+    jest.runOnlyPendingTimers()
+    await Vue.nextTick()
+    
+    for (let i = 0; i < 4; i++) {
+        jest.runOnlyPendingTimers()
+        await Vue.nextTick()
+    }
+
+    expect(wrapper.findAll('.message').at(1).text()).toBe('Blackjack!')
+  })
+
+  it('should show player score of 21 with a king, queen and ace', async () => {
+
+    // Give player a hand of 21 (HK, HQ, HA), and dealer a hand of 22 (CK, C2, CQ)
+    let modifiedDeck = ['HK', 'CK', 'HQ', 'C2', 'HA', 'CQ', ...wrapper.vm.$data.deckCards]
+    await wrapper.setData({ deckCards: modifiedDeck })
+
+    await startGame()
+
+    await pressHit()
+
+    expect(wrapper.findAll('.message').at(1).text()).toBe('Blackjack!')
+  })
+
+  it('should show player score of 21 with a 9, and 2 aces', async () => {
+
+    // Give player a hand of 21 (HK, HA, DA), and dealer a hand of 22 (CK, C2, CQ)
+    let modifiedDeck = ['H9', 'CK', 'HA', 'C2', 'DA', 'CQ', ...wrapper.vm.$data.deckCards]
+    await wrapper.setData({ deckCards: modifiedDeck })
+
+    await startGame()
+
+    await pressHit()
+
+    expect(wrapper.findAll('.message').at(1).text()).toBe('Blackjack!')
   })
 })
